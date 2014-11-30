@@ -1,0 +1,70 @@
+<scene>
+	<instance name="sphere" path="models/sphere" />
+	<instance name="box" path="models/box" />
+	<instance name="cylinder" path="models/cylinder" />
+	<instance name="cone" path="models/cone" />
+	<image name="checkerboard" path="checkerboard.png" />
+	<image name="earthmap" path="earthmap.png" />
+	
+	<transform camera="true">
+		<set>
+			<scale>50 25 50</scale>
+		</set>
+		<object instanceof="sphere" camera="true">
+		<material>
+			<ambient>1 0 0</ambient>
+			<diffuse>1 0 0</diffuse>
+			<specular>1 1 1</specular>
+			<shininess>50</shininess>
+			<!--the following four will be relevant in ray tracer -->
+			<absorption>0.5 </absorption>
+			<reflection>0.1</reflection>
+			<transparency>0.4</transparency>
+			<refractive>1.2</refractive>
+		</material>
+		<!-- light added to object node -->
+		<light>
+			<ambient>0.8 0.8 0.8</ambient>
+			<diffuse>0.8 0.8 0.8</diffuse>
+			<specular>0.8 0.8 0.8</specular>
+			<position>100 100 100 </position>
+			<!-- <direction>0 1 0 </direction> -->
+			<spotangle>90</spotangle>
+			<spotdirection>1 0 0 </spotdirection>
+		</light>
+	</object>	
+	</transform>
+	
+	<transform>
+		<set>
+			<scale>20 100 20</scale>
+			<translate>0 40 0</translate>
+
+		</set>
+		<object instanceof="cylinder" texture="checkerboard">
+		<material>
+			<ambient>1 0 0</ambient>
+			<diffuse>1 0 0</diffuse>
+			<specular>1 1 1</specular>
+			<shininess>50</shininess>
+			<!--the following four will be relevant in ray tracer -->
+			<absorption>0.5 </absorption>
+			<reflection>0.1</reflection>
+			<transparency>0.4</transparency>
+			<refractive>1.2</refractive>
+		</material>
+		<!-- light added to object node -->
+		<light>
+			<ambient>0.8 0.8 0.8</ambient>
+			<diffuse>0.8 0.8 0.8</diffuse>
+			<specular>0.8 0.8 0.8</specular>
+			<position>100 100 100 </position>
+			<!-- <direction>0 1 0 </direction> -->
+			<spotangle>90</spotangle>
+			<spotdirection>1 0 0 </spotdirection>
+		</light>
+	</object>	
+	</transform>
+	
+	
+	</scene>

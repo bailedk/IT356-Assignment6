@@ -1,0 +1,40 @@
+<scene>
+	<instance name="sphere" path="models/sphere" />
+	<instance name="box" path="models/box" />
+	<instance name="cylinder" path="models/cylinder" />
+	<instance name="cone" path="models/cone" />
+					
+	<group>
+	<light>
+		<ambient>.5 .5 .5</ambient>
+		<diffuse>0.8 0.8 0.8</diffuse>
+		<specular>0.8 0.8 0.8</specular>
+		<position>0 5 0</position>
+		<direction>0 1 0 </direction>
+		<spotangle>90</spotangle>
+		<spotdirection>1 0 0 </spotdirection>
+	</light> 
+
+	<transform>
+			<set>		
+			</set>
+			<object instanceof="box">
+				<material>
+					<ambient>.5 0 0</ambient>
+					<diffuse>.5 0 0</diffuse>
+					<specular>.5 0 0</specular>
+					<shininess>5</shininess>
+					<!--the following four will be relevant in ray tracer -->
+					<absorption>0.5 </absorption>
+					<reflection>0.1</reflection>
+					<transparency>0.4</transparency>
+					<refractive>1.2</refractive>
+				</material>
+				<!-- light added to object node -->
+
+			</object>			
+							
+	</transform>
+</group>
+
+</scene>
