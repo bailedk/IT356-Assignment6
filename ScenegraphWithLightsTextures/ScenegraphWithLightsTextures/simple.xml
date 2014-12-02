@@ -3,6 +3,7 @@
 	<instance name="box" path="models/box" />
 	<instance name="cylinder" path="models/cylinder" />
 	<instance name="cone" path="models/cone" />
+	<image name="checkerboard" path="checkerboard.png" />
 					
 	<group>
 	<light>
@@ -18,7 +19,7 @@
 	<transform>
 			<set>		
 			</set>
-			<object instanceof="box">
+			<object instanceof="sphere" texture="checkerboard">
 				<material>
 					<ambient>.5 0 0</ambient>
 					<diffuse>.5 0 0</diffuse>

@@ -245,7 +245,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color)
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
-		color = shade(hit.intersect, lights, hit.normal, hit.getMat());
+		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT());
 		hit;
 		//cout << "hit set color "  << endl;
 		// lots of other stuff for reflection, transparency, refract etc...
@@ -259,7 +259,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color)
 	return isHit;
 }
 
-sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat) {
+sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t) {
 
 
 	glm::vec4 colorv = glm::vec4(0,0,0,1);
@@ -298,18 +298,15 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 		else {
 			specular = glm::vec3(0,0,0);
 		}
-		//colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
-		//cout << "specular " << specular.x << " " << specular.y << " " << specular.z << " " << endl; 
 		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 	}
-		//fColor = fColor * texture2D(image,fTexCoord.st);
 	
-	//cout << "color: " << colorv.x << " " << colorv.y << " " << colorv.z << endl;
-
-	int r = colorv.x* 255;
-	int g = colorv.y* 255;
-	int b = colorv.z* 255;
-	int a = colorv.a* 255;
+	
+	
+	float r = colorv.x* 255;
+	float g = colorv.y* 255;
+	float b = colorv.z* 255;
+	float a = colorv.a* 255;
 	
 	if(r > 255)
 		r = 255;
@@ -317,8 +314,9 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 		g = 255;
 	if(b > 255) 
 		b = 255;
-	
-	sf::Color colorr(r,g,b,a);
+	tex->lookup(s,t,r,g,b);
+	sf::Color colorr(colorv.r,colorv.g,colorv.b,colorv.a);
+
 	return colorr;
 
 }

@@ -159,8 +159,6 @@ public:
 
 		glm::vec4 dir = glm::inverse(modelView.top())*ray.getDirection();
 		glm::vec4 start = glm::inverse(modelView.top())*ray.getStart();
-		//ray.setDirection(dir);
-		//ray.setStart(start);
 
 		if(instanceOf->getName().compare("sphere") ==0) {
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
@@ -186,7 +184,8 @@ public:
 					glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
 					glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
 					hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
-					hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f)); 
+					hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
+					setTexCoordinHitSphere(glm::vec4(norm.x,norm.y,norm.z,1.0f), hit, modelView);
 				}
 
 				
@@ -296,6 +295,29 @@ public:
 
 		// if it's not an object we have just give a no-hit
 		return false;
+	}
+
+	void setTexCoordinHitSphere(glm::vec4 intersect, Hit& hit, stack<glm::mat4>& modelView){
+		float theta, phi, s, t;
+		//glm::vec4 map;
+		phi=glm::radians(asin(intersect.y));
+		theta=glm::radians(atan(intersect.z/intersect.x));
+		//if(theta>(2*3.141592)||theta<0){
+			//cout<<"GREATER"<<endl;
+		//}
+		//if(phi>(3.141592/2)||theta<(3.141592/2)*-1){
+			//cout<<"LESSER"<<endl;
+		//}
+		//map.x = cos(theta) * cos(phi);
+		//map.y = sin(phi);
+		//map.z = cos(phi)*sin(theta);
+		//map.w = 1;
+		//hit.setTextureCoord(map*modelView.top());
+		s = glm::abs(theta/(2*3.141592));
+		hit.setTextureS(s);
+		t= glm::abs((phi+(3.141592/2))/3.141592);
+		hit.setTextureT(t);
+		hit.setTexture(texture);
 	}
 	
 protected:

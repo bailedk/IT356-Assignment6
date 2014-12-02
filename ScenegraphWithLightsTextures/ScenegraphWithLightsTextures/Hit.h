@@ -15,17 +15,18 @@ class Hit
 {
 public:
 
-	float time;
+	
 	//pt
 	glm::vec4 intersect;
 	//n_pt
 	glm::vec4 normal;
 	Material mat;
-	Texture tex;
+	Texture *tex;
+	glm::vec4 texCoord;
 	// add a texturemap at some point?
-
-	float s;
 	float t;
+	float texS;
+	float texT;
 
     Hit() {
 		t = -FLT_MAX*-1;
@@ -56,6 +57,30 @@ public:
 	}
 	float getT(){
 		return t;
+	}
+	void setTexture(Texture *t){
+		tex =t;
+	}
+	Texture* getTexture(){
+		return tex;
+	}
+	void setTextureCoord(glm::vec4 coord){
+		texCoord = coord;
+	}
+	glm::vec4 getTextureCoord(){
+		return texCoord;
+	}
+	void setTextureT(float text){
+		texT = text;
+	}
+	float getTextureT(){
+		return texT;
+	}
+	void setTextureS(float texs){
+		texS = texs;
+	}
+	float getTextureS(){
+		return texS;
 	}
 protected:
 	// woop
