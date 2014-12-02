@@ -301,7 +301,7 @@ public:
 		float theta, phi, s, t;
 		//glm::vec4 map;
 		phi=glm::radians(asin(intersect.y));
-		theta=glm::radians(atan(intersect.z/intersect.x));
+		theta=glm::radians(atan2(intersect.x,intersect.z));
 		//if(theta>(2*3.141592)||theta<0){
 			//cout<<"GREATER"<<endl;
 		//}

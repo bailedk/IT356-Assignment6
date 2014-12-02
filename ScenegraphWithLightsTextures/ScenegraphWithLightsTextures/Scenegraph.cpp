@@ -300,22 +300,27 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 		}
 		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 	}
+	float r=0;
+	float g=0;
+	float b=0;
+	tex->lookup(s,t,r,g,b);
 	
-	
-	
-	float r = colorv.x* 255;
-	float g = colorv.y* 255;
-	float b = colorv.z* 255;
-	float a = colorv.a* 255;
-	
+	r = r*colorv.x;
+	g = g*colorv.y;
+	b = b*colorv.z;
+	float a = colorv.a*255;
+	r*=255;
+	g*=255;
+	b*=255;
+
 	if(r > 255)
 		r = 255;
 	if(g > 255)
 		g = 255;
 	if(b > 255) 
 		b = 255;
-	tex->lookup(s,t,r,g,b);
-	sf::Color colorr(colorv.r,colorv.g,colorv.b,colorv.a);
+	
+	sf::Color colorr(r,g,b,a);
 
 	return colorr;
 

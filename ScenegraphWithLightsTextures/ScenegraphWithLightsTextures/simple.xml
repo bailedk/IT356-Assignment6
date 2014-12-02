@@ -3,7 +3,7 @@
 	<instance name="box" path="models/box" />
 	<instance name="cylinder" path="models/cylinder" />
 	<instance name="cone" path="models/cone" />
-	<image name="checkerboard" path="checkerboard.png" />
+	<image name="checkerboard" path="earthmap.png" />
 					
 	<group>
 	<light>
@@ -21,9 +21,9 @@
 			</set>
 			<object instanceof="sphere" texture="checkerboard">
 				<material>
-					<ambient>.5 0 0</ambient>
-					<diffuse>.5 0 0</diffuse>
-					<specular>.5 0 0</specular>
+					<ambient>1 1 1</ambient>
+					<diffuse>1 1 1</diffuse>
+					<specular>1 1 1</specular>
 					<shininess>5</shininess>
 					<!--the following four will be relevant in ray tracer -->
 					<absorption>0.5 </absorption>
