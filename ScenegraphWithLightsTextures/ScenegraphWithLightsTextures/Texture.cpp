@@ -59,12 +59,14 @@ void Texture::lookup(float x,float y,float& r,float& g,float& b)
   y = y-(int)y;
   x *= image->getSize().x;
   y *= image->getSize().y;
+
   i = (int)y;
   j = (int)x;
   if (j<0)
   {
     j = 0;
   }
+
 
   //cout << "i: " << i << " j: " << j << endl;
 

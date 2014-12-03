@@ -303,12 +303,14 @@ public:
 		//	cout << intersect.y << endl;
 		//cout << "intersect.y" << intersect.y << endl;
 
-		//glm::vec4 map;
+		glm::vec4 map;
 		if(intersect.y > 0.995)
 			intersect.y = 1;
 
 		phi=asin(intersect.y);
-		theta=atan2(intersect.z,intersect.x);
+		//theta=(atan2(intersect.z,intersect.x) + 3.141592) / (2*3.141592);
+		theta = atan2(intersect.z,intersect.x)+3.1415;
+		//cout << "theta" << theta << endl;
 		//if(theta>(2*3.141592)||theta<0){
 			//cout<<"GREATER"<<endl;
 		//}
@@ -320,7 +322,12 @@ public:
 		//map.z = cos(phi)*sin(theta);
 		//map.w = 1;
 		//hit.setTextureCoord(map*modelView.top());
-		s = theta/(2*3.141592);
+		s = theta/(2*3.1415);
+		//s = theta;
+		//cout << "s" << s << endl;
+		//s = s - (int)s;
+
+
 		hit.setTextureS(s);
 		t= (phi+(3.141592/2))/3.141592;
 
