@@ -218,7 +218,8 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setStart(glm::vec4(0,0,0,1));
 			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
-			if(raycast(ray, modelView, color)) {
+			// CHANGE TO TRUE WHEN DOING SHADOWS
+			if(raycast(ray, modelView, color, false)) {
 				image.setPixel(j,i,color);
 				count++;
 				//cout << "white" << endl;
@@ -239,13 +240,13 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 }
 
 //bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat, sf::Color& color){
-bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color){
+bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow){
 	bool isHit = false;
 	Hit hit;
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
-		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT());
+		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow);
 		hit;
 		//cout << "hit set color "  << endl;
 		// lots of other stuff for reflection, transparency, refract etc...
@@ -259,7 +260,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color)
 	return isHit;
 }
 
-sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t) {
+sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow) {
 
 
 	glm::vec4 colorv = glm::vec4(0,0,0,1);
@@ -271,34 +272,47 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 
 	for (int i=0;i<lights.size();i++)
 	{
-		if (lights[i].getPosition().w != 0)
-			lightVec = glm::normalize(lights[i].getPosition().xyz()  - pt.xyz());
-		else
-			lightVec = glm::normalize(-lights[i].getPosition().xyz());
+		bool isShadow = false;
+		if(shadow) {
 
-		glm::vec3 tNormal = normal.xyz();
-		normalView = glm::normalize(tNormal);
-		nDotL = glm::dot(normalView,lightVec);
 
-		viewVec = -pt.xyz();
-		viewVec = glm::normalize(viewVec);
-
-		reflectVec = glm::reflect(-lightVec,normalView);
-		reflectVec = glm::normalize(reflectVec);
-
-		rDotV = glm::max(glm::dot(reflectVec,viewVec),0.0f);
-
-		ambient = mat.getAmbient().xyz() * lights[i].getAmbient().xyz();
-
-		diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
-
-		if (nDotL>0) {
-			specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
+			if(t>=0 && t<=1) {
+				isShadow = true;
+			}
 		}
-		else {
-			specular = glm::vec3(0,0,0);
+		
+		if(!isShadow) {
+			// i think some or all of below goes inside here
+
+			if (lights[i].getPosition().w != 0)
+				lightVec = glm::normalize(lights[i].getPosition().xyz()  - pt.xyz());
+			else
+				lightVec = glm::normalize(-lights[i].getPosition().xyz());
+
+			glm::vec3 tNormal = normal.xyz();
+			normalView = glm::normalize(tNormal);
+			nDotL = glm::dot(normalView,lightVec);
+
+			viewVec = -pt.xyz();
+			viewVec = glm::normalize(viewVec);
+
+			reflectVec = glm::reflect(-lightVec,normalView);
+			reflectVec = glm::normalize(reflectVec);
+
+			rDotV = glm::max(glm::dot(reflectVec,viewVec),0.0f);
+
+			ambient = mat.getAmbient().xyz() * lights[i].getAmbient().xyz();
+
+			diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
+
+			if (nDotL>0) {
+				specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
+			}
+			else {
+				specular = glm::vec3(0,0,0);
+			}
+			colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 		}
-		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 	}
 	float r=0;
 	float g=0;

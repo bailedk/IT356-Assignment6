@@ -38,7 +38,7 @@ public:
     void initShaderProgram(GLint shaderProgram);
     void draw(stack<glm::mat4>& modelView);
 	vector<vector<float>> raytrace(int w, int h, stack<glm::mat4>& modelView);
-	bool raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color);
+	bool raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow);
 	void setFOV(float fov);
 	float turn;
 	float zoom;
@@ -93,7 +93,7 @@ private:
 		mat_diffuseLocation,mat_specularLocation,mat_shininessLocation,texturematrixLocation,textureLocation;
 	void getLights(stack<glm::mat4>& modelView);
 
-	sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t);
+	sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow);
 
 	LightLocation lightLocation[3];
 	float fov;

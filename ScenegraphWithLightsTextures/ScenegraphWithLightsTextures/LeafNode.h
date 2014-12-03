@@ -284,6 +284,7 @@ public:
 					else if(glm::abs(norm.z+.5)<.005)
 						hit.setNormal(modelView.top()*glm::vec4(0,0,-1,0));
 					hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
+					setTexCoordinHitBox(glm::vec4(norm.x,norm.y,norm.z,1.0f), hit, modelView);
 					return true;
 				}
 			}
@@ -295,6 +296,57 @@ public:
 
 		// if it's not an object we have just give a no-hit
 		return false;
+	}
+
+	void setTexCoordinHitBox(glm::vec4 intersect, Hit& hit, stack<glm::mat4>& modelView) {
+		// This is probably 99% wrong, and is broken
+		// need to do calculation for each fact
+
+		float s, t;
+		//s = -intersect.z + 0.5;
+		//t = -intersect.y + 0.5;
+
+		s = 0;
+		t = 0;
+
+
+
+		if(glm::abs(intersect.x-.5)<.005) {
+			s = intersect.z + 0.5;
+			t = intersect.y + 0.5;
+			//hit.setNormal(modelView.top()*glm::vec4(1,0,0,0));
+		}
+		else if(glm::abs(intersect.x+.5)<.005) {
+			//hit.setNormal(modelView.top()*glm::vec4(-1,0,0,0));
+		}
+		else if(glm::abs(intersect.y-.5)<.005) {
+			//hit.setNormal(modelView.top()*glm::vec4(0,1,0,0));
+		}
+		else if(glm::abs(intersect.y+.5)<.005) {
+			//hit.setNormal(modelView.top()*glm::vec4(0,-1,0,0));
+		}
+		else if(glm::abs(intersect.z-.5)<.005) {
+			//hit.setNormal(modelView.top()*glm::vec4(0,0,1,0));
+		}
+		else if(glm::abs(intersect.z+.5)<.005) {
+			//hit.setNormal(modelView.top()*glm::vec4(0,0,-1,0));
+		}
+
+
+		if(t > 0.95) {
+			t = 0.95;
+		}
+		if(s > 0.95) {
+			s = 0.96;
+		}
+
+		cout << "s: " << s << " t: " << t << endl;
+
+		hit.setTextureS(s);
+
+		hit.setTextureT(t);
+		hit.setTexture(texture);
+
 	}
 
 	void setTexCoordinHitSphere(glm::vec4 intersect, Hit& hit, stack<glm::mat4>& modelView){
