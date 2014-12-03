@@ -309,7 +309,7 @@ public:
 
 		phi=asin(intersect.y);
 		//theta=(atan2(intersect.z,intersect.x) + 3.141592) / (2*3.141592);
-		theta = atan2(intersect.z,intersect.x)+3.1415;
+		theta = atan2(intersect.z,intersect.x)+3.1415*2;
 		//cout << "theta" << theta << endl;
 		//if(theta>(2*3.141592)||theta<0){
 			//cout<<"GREATER"<<endl;
@@ -322,8 +322,14 @@ public:
 		//map.z = cos(phi)*sin(theta);
 		//map.w = 1;
 		//hit.setTextureCoord(map*modelView.top());
-		s = theta/(2*3.1415);
+		s = 1- theta/(2*3.1415);
 		//s = theta;
+		cout << "s" << s << endl;
+	
+		if(s < 1) {
+			s = s+1;
+		}
+		
 		//cout << "s" << s << endl;
 		//s = s - (int)s;
 
