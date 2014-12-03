@@ -299,9 +299,16 @@ public:
 
 	void setTexCoordinHitSphere(glm::vec4 intersect, Hit& hit, stack<glm::mat4>& modelView){
 		float theta, phi, s, t;
+		//if(intersect.y >= 1 || intersect.y <= -1)
+		//	cout << intersect.y << endl;
+		//cout << "intersect.y" << intersect.y << endl;
+
 		//glm::vec4 map;
-		phi=glm::radians(asin(intersect.y));
-		theta=glm::radians(atan2(intersect.x,intersect.z));
+		if(intersect.y > 0.995)
+			intersect.y = 1;
+
+		phi=asin(intersect.y);
+		theta=atan2(intersect.z,intersect.x);
 		//if(theta>(2*3.141592)||theta<0){
 			//cout<<"GREATER"<<endl;
 		//}
@@ -313,9 +320,11 @@ public:
 		//map.z = cos(phi)*sin(theta);
 		//map.w = 1;
 		//hit.setTextureCoord(map*modelView.top());
-		s = glm::abs(theta/(2*3.141592));
+		s = theta/(2*3.141592);
 		hit.setTextureS(s);
-		t= glm::abs((phi+(3.141592/2))/3.141592);
+		t= (phi+(3.141592/2))/3.141592;
+
+		//cout << "s: " << s << " t: " << t << endl; 
 		hit.setTextureT(t);
 		hit.setTexture(texture);
 	}

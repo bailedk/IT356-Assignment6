@@ -66,6 +66,7 @@ void Texture::lookup(float x,float y,float& r,float& g,float& b)
     j = 0;
   }
 
+  //cout << "i: " << i << " j: " << j << endl;
 
   for (int k=0;k<3;k++)
   {
