@@ -307,48 +307,32 @@ public:
 		s = 0.5;
 		t = 0.5;
 
-		//s = -intersect.z + 0.5;
-		//t = -intersect.y + 0.5;
-
-		//1,2,3,4 are good but rotated
+		//all sides should be working fine
 		if(glm::abs(intersect.x-.5)<.005) {
 			//working
 			t = -intersect.z + 0.5;
 			s = -intersect.y + 0.5;
-
 		}
 		else if(glm::abs(intersect.x+.5)<.005) {
-			//hit.setNormal(modelView.top()*glm::vec4(-1,0,0,0));
-			//working
 			t = intersect.z + 0.5;
 			s = -intersect.y + 0.5;
 		}
 		else if(glm::abs(intersect.y-.5)<.005) {
-			//hit.setNormal(modelView.top()*glm::vec4(0,1,0,0));
-			//working
 			s = intersect.z + 0.5;
 			t = intersect.x + 0.5;
 		}
 		else if(glm::abs(intersect.y+.5)<.005) {
-			//working
 			s = intersect.z + 0.5;
 			t = -intersect.x + 0.5;
-			//hit.setNormal(modelView.top()*glm::vec4(0,-1,0,0));
 		}
 		else if(glm::abs(intersect.z-.5)<.005) {
-			//working
 			s = -intersect.y + 0.5;
 			t = intersect.x + 0.5;
-			//hit.setNormal(modelView.top()*glm::vec4(0,0,1,0));
 		}
 		else if(glm::abs(intersect.z+.5)<.005) {
-			//hit.setNormal(modelView.top()*glm::vec4(0,0,-1,0));
-			//working
 			s = intersect.y + 0.5;
 			t = intersect.x + 0.5;
 		}
-
-		//cout << "s: " << s << " t: " << t << endl;
 
 		if(s > 0.995) {
 			s = 1;
@@ -397,7 +381,7 @@ public:
 			s = s+1;
 		}
 
-		cout << "s" << s << endl;
+		//cout << "s" << s << endl;
 		
 		//cout << "s" << s << endl;
 		//s = s - (int)s;

@@ -219,7 +219,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
 			// CHANGE TO TRUE WHEN DOING SHADOWS
-			if(raycast(ray, modelView, color, false)) {
+			if(raycast(ray, modelView, color, true)) {
 				image.setPixel(j,i,color);
 				count++;
 				//cout << "white" << endl;
@@ -246,7 +246,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
-		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow);
+		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow, modelView);
 		hit;
 		//cout << "hit set color "  << endl;
 		// lots of other stuff for reflection, transparency, refract etc...
@@ -260,7 +260,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 	return isHit;
 }
 
-sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow) {
+sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow, stack<glm::mat4>& modelView) {
 
 
 	glm::vec4 colorv = glm::vec4(0,0,0,1);
@@ -274,9 +274,30 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 	{
 		bool isShadow = false;
 		if(shadow) {
+			// pt is S
+			glm::vec4 P = pt;
 
+			// light position is L
+			glm::vec4 L = lights[i].getPosition();
+			// D
+			glm::vec4 D = L - P;
+			// fuzz it a bit
+			glm::vec4 S = P + 0.01f * D;
+			L = P + t * (L-P);
 
-			if(t>=0 && t<=1) {
+			Ray shadowRay;
+			shadowRay.setDirection(D);
+			shadowRay.setStart(S);
+			
+			Hit shadowHit;
+
+			// checking if it sees it
+			root->intersect(shadowRay,shadowHit,modelView);
+
+			// check if it does actually produce a shadow
+			float shadowTime = shadowHit.getT();
+			if(shadowTime >= 0 && shadowTime <= 1) {
+				colorv = colorv + glm::vec4(0,0,0,1.0f);
 				isShadow = true;
 			}
 		}

@@ -93,7 +93,7 @@ private:
 		mat_diffuseLocation,mat_specularLocation,mat_shininessLocation,texturematrixLocation,textureLocation;
 	void getLights(stack<glm::mat4>& modelView);
 
-	sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow);
+	sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow, stack<glm::mat4>& modelView);
 
 	LightLocation lightLocation[3];
 	float fov;

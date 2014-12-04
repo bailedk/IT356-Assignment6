@@ -163,7 +163,7 @@ void View::draw()
 	// raytrace, eventually let this be called when the user presses a key(?)
 	if(raytraceImg) {
 		cout << "raytrace" << endl;
-		sgraph.raytrace(600,600, modelview);
+		sgraph.raytrace(200,200, modelview);
 		cout<<"raytrace done"<<endl;
 		raytraceImg = false;
 	}
