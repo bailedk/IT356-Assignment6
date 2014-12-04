@@ -377,7 +377,7 @@ public:
 		//s = theta;
 
 	
-		if(s < 1) {
+		if(s < 0) {
 			s = s+1;
 		}
 

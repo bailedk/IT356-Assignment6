@@ -20,7 +20,7 @@
 		<ambient>.5 .5 .5</ambient>
 		<diffuse>0.8 0.8 0.8</diffuse>
 		<specular>0.8 0.8 0.8</specular>
-		<position>0.2 1.2 0</position>
+		<position>0 4 4</position>
 		<direction>0 1 0 </direction>
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
@@ -29,7 +29,7 @@
 	<transform>
 			<set>		
 			</set>
-			<object instanceof="box" texture="checkerboard">
+			<object instanceof="sphere" texture="checkerboard">
 				<material>
 					<ambient>1 1 1</ambient>
 					<diffuse>1 1 1</diffuse>

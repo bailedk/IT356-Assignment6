@@ -21,7 +21,7 @@
 			<set>		
 			
 			</set>
-			<object instanceof="box">
+			<object instanceof="sphere">
 				<material>
 					<ambient>1 0 0</ambient>
 					<diffuse>0 0 0</diffuse>

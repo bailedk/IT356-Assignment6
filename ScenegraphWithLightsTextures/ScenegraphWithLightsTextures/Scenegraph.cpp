@@ -263,7 +263,7 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow, stack<glm::mat4>& modelView) {
 
 
-	glm::vec4 colorv = glm::vec4(0,0,0,1);
+	glm::vec4 colorShade = glm::vec4(0,0,0,1);
 
 	glm::vec3 lightVec,viewVec,reflectVec;
 	glm::vec3 normalView;
@@ -273,6 +273,7 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 	for (int i=0;i<lights.size();i++)
 	{
 		bool isShadow = false;
+
 		if(shadow) {
 			// pt is S
 			glm::vec4 P = pt;
@@ -297,7 +298,7 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 			// check if it does actually produce a shadow
 			float shadowTime = shadowHit.getT();
 			if(shadowTime >= 0 && shadowTime <= 1) {
-				colorv = colorv + glm::vec4(0,0,0,1.0f);
+				colorShade = colorShade + glm::vec4(0,0,0,1.0f);
 				isShadow = true;
 			}
 		}
@@ -332,7 +333,7 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 			else {
 				specular = glm::vec3(0,0,0);
 			}
-			colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
+			colorShade = colorShade + glm::vec4(ambient+diffuse+specular,1.0);
 		}
 	}
 	float r=0;
@@ -340,10 +341,10 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 	float b=0;
 	tex->lookup(s,t,r,g,b);
 	
-	r = r*colorv.x;
-	g = g*colorv.y;
-	b = b*colorv.z;
-	float a = colorv.a*255;
+	r = r*colorShade.x;
+	g = g*colorShade.y;
+	b = b*colorShade.z;
+	float a = colorShade.a*255;
 	r*=255;
 	g*=255;
 	b*=255;
@@ -355,9 +356,9 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 	if(b > 255) 
 		b = 255;
 	
-	sf::Color colorr(r,g,b,a);
+	sf::Color colorMult(r,g,b,a);
 
-	return colorr;
+	return colorMult;
 
 }
 
