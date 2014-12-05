@@ -46,6 +46,9 @@ public:
 	void setNormal(glm::vec4 normalIn) {
 		normal = normalIn;
 	}
+	glm::vec4 getNormal() {
+		return normal;
+	}
 	glm::vec4 getIntersection() {
 		return intersect;
 	}

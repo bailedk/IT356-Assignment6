@@ -7,20 +7,22 @@
 	<image name="white" path="white.png" />
 					
 	<group>
+	
 	<light>
 		<ambient>.5 .5 .5</ambient>
 		<diffuse>0.8 0.8 0.8</diffuse>
-		<specular>0.8 0.8 0.8</specular>
-		<position>1.2 0.2 0</position>
+		<specular>0 0 0</specular>
+		<position>0 2 -10</position>
 		<direction>0 1 0 </direction>
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
 	</light> 
+	
 	<light>
-		<ambient>.5 .5 .5</ambient>
-		<diffuse>0.8 0.8 0.8</diffuse>
-		<specular>0.8 0.8 0.8</specular>
-		<position>0 4 4</position>
+		<ambient>1 1 1</ambient>
+		<diffuse>1 1 1</diffuse>
+		<specular>0 0 0</specular>
+		<position>1.2 0 0</position>
 		<direction>0 1 0 </direction>
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
@@ -28,17 +30,40 @@
 
 	<transform>
 			<set>		
+				<translate>0 -1.2 0</translate>
 			</set>
-			<object instanceof="sphere" texture="checkerboard">
+			<object instanceof="sphere">
 				<material>
-					<ambient>1 1 1</ambient>
+					<ambient>0 1 0</ambient>
 					<diffuse>1 1 1</diffuse>
 					<specular>1 1 1</specular>
-					<shininess>5</shininess>
+					<shininess>50</shininess>
 					<!--the following four will be relevant in ray tracer -->
-					<absorption>0.5 </absorption>
+					<absorption>0.4 </absorption>
 					<reflection>0.1</reflection>
-					<transparency>0.4</transparency>
+					<transparency>0.2</transparency>
+					<refractive>1.2</refractive>
+				</material>
+				<!-- light added to object node -->
+
+			</object>			
+							
+	</transform>
+	
+	<transform>
+			<set>		
+				<translate>0 1.2 0</translate>
+			</set>
+			<object instanceof="sphere">
+				<material>
+					<ambient>1 0 0</ambient>
+					<diffuse>1 1 1</diffuse>
+					<specular>1 1 1</specular>
+					<shininess>50</shininess>
+					<!--the following four will be relevant in ray tracer -->
+					<absorption>0.4 </absorption>
+					<reflection>0.1</reflection>
+					<transparency>0.2</transparency>
 					<refractive>1.2</refractive>
 				</material>
 				<!-- light added to object node -->
@@ -55,7 +80,7 @@
 		</set>
 			<object instanceof="box" texture = "white">
 				<material>
-					<ambient>1 0 0</ambient>
+					<ambient>0 0 1</ambient>
 					<diffuse>1 1 1</diffuse>
 					<specular>1 1 1</specular>
 					<shininess>5</shininess>

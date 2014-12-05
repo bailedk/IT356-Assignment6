@@ -218,8 +218,8 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setStart(glm::vec4(0,0,0,1));
 			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
-			// CHANGE TO TRUE WHEN DOING SHADOWS
-			if(raycast(ray, modelView, color, true)) {
+			// Change bool to turn on/off shadows
+			if(raycast(ray, modelView, color, false, 5)) {
 				image.setPixel(j,i,color);
 				count++;
 				//cout << "white" << endl;
@@ -240,7 +240,15 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 }
 
 //bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat, sf::Color& color){
-bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow){
+bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow, int count){
+
+	if(count>5) {
+		return false;
+	}
+	sf::Color color_a;
+	sf::Color color_r;
+	//sf::Color color_t; // unused
+
 	bool isHit = false;
 	Hit hit;
 	isHit=root->intersect(ray,hit,modelView); 
@@ -252,11 +260,33 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 		// lots of other stuff for reflection, transparency, refract etc...
 		// todo later
 		//color = color.White;
+
+		// REFACTOR
+		sf::Color color_a(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
+
+		if(hit.getMat().getReflection()) {
+			//cout << "reflect" << endl;
+			count++;
+			Ray reflectRay;
+
+			// ONLY NORMALIZE A VEC3
+			reflectRay.setDirection(glm::normalize(glm::reflect(ray.getDirection(), hit.getNormal())));
+			reflectRay.setStart(hit.getIntersection() + 0.01f*ray.getDirection());
+
+			raycast(reflectRay, modelView, color_r, true, count);
+
+			color.r = color_r.r*hit.getMat().getReflection() + color_a.r;
+			color.g = color_r.g*hit.getMat().getReflection() + color_a.g;
+			color.b = color_r.b*hit.getMat().getReflection() + color_a.b;
+		}
+
+		// END REFACTOR
 	}
 	else {
 		color = color.Black;
 	}
 
+	//color = color_a;
 	return isHit;
 }
 

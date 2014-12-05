@@ -38,7 +38,7 @@ public:
     void initShaderProgram(GLint shaderProgram);
     void draw(stack<glm::mat4>& modelView);
 	vector<vector<float>> raytrace(int w, int h, stack<glm::mat4>& modelView);
-	bool raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow);
+	bool raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow, int count);
 	void setFOV(float fov);
 	float turn;
 	float zoom;
