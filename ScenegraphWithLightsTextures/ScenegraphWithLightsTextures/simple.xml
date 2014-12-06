@@ -9,10 +9,10 @@
 	<group>
 	
 	<light>
-		<ambient>.5 .5 .5</ambient>
-		<diffuse>0.8 0.8 0.8</diffuse>
+		<ambient>1 1 1</ambient>
+		<diffuse>1 1 1</diffuse>
 		<specular>0 0 0</specular>
-		<position>0 2 -10</position>
+		<position>1.2 0 0</position>
 		<direction>0 1 0 </direction>
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
@@ -22,7 +22,7 @@
 		<ambient>1 1 1</ambient>
 		<diffuse>1 1 1</diffuse>
 		<specular>0 0 0</specular>
-		<position>1.2 0 0</position>
+		<position>1.2 0 2</position>
 		<direction>0 1 0 </direction>
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
@@ -40,35 +40,37 @@
 					<shininess>50</shininess>
 					<!--the following four will be relevant in ray tracer -->
 					<absorption>0.4 </absorption>
-					<reflection>0.1</reflection>
-					<transparency>0.2</transparency>
+					<reflection>0.6</reflection>
+					<transparency>0</transparency>
 					<refractive>1.2</refractive>
 				</material>
 				<!-- light added to object node -->
 
-			</object>			
+			</object>		
+	
 							
 	</transform>
 	
-	<transform>
+		<transform>
 			<set>		
 				<translate>0 1.2 0</translate>
 			</set>
 			<object instanceof="sphere">
 				<material>
 					<ambient>1 0 0</ambient>
-					<diffuse>1 1 1</diffuse>
-					<specular>1 1 1</specular>
-					<shininess>50</shininess>
+					<diffuse>0.3 0.3 0.3</diffuse>
+					<specular>0.2 0.2 0.2</specular>
+					<shininess>5</shininess>
 					<!--the following four will be relevant in ray tracer -->
-					<absorption>0.4 </absorption>
-					<reflection>0.1</reflection>
-					<transparency>0.2</transparency>
+					<absorption>0.8 </absorption>
+					<reflection>0.2</reflection>
+					<transparency>0</transparency>
 					<refractive>1.2</refractive>
 				</material>
 				<!-- light added to object node -->
 
-			</object>			
+			</object>		
+	
 							
 	</transform>
 	
@@ -81,13 +83,13 @@
 			<object instanceof="box" texture = "white">
 				<material>
 					<ambient>0 0 1</ambient>
-					<diffuse>1 1 1</diffuse>
-					<specular>1 1 1</specular>
-					<shininess>5</shininess>
+					<diffuse>0.3 0.3 0.3</diffuse>
+					<specular>0.2 0.2 0.2</specular>
+					<shininess>0.5</shininess>
 					<!--the following four will be relevant in ray tracer -->
-					<absorption>0.5 </absorption>
+					<absorption>0.9 </absorption>
 					<reflection>0.1</reflection>
-					<transparency>0.4</transparency>
+					<transparency>0</transparency>
 					<refractive>1.2</refractive>
 				</material>
 				<!-- light added to object node -->

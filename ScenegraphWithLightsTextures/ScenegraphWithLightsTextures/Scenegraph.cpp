@@ -219,7 +219,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
 			// Change bool to turn on/off shadows
-			if(raycast(ray, modelView, color, false, 0)) {
+			if(raycast(ray, modelView, color, true, 0)) {
 				image.setPixel(j,i,color);
 				count++;
 				//cout << "white" << endl;
@@ -239,50 +239,107 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 
 }
 
-//bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat, sf::Color& color){
 bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow, int count){
 
+       bool isHit = false;
+       Hit hit;
+       isHit=root->intersect(ray,hit,modelView); 
+
+	   sf::Color reflectColor;
+
+       if(isHit) {
+               color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow, modelView);
+               hit;
+       
+               // REFACTOR
+               sf::Color color_a(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
+
+			   
+               if(hit.getMat().getReflection()>0&&count<5) {
+                       //cout << "reflect" << endl;
+                       count++;
+                       Ray reflectRay;
+                       glm::vec4 reflectVec4 = glm::reflect(ray.getDirection(), hit.getNormal());
+                       glm::vec3 reflectVec3 = glm::vec3(reflectVec4.x,reflectVec4.y,reflectVec4.z);
+                       // ONLY NORMALIZE A VEC3
+                       reflectRay.setDirection(glm::vec4(glm::normalize(reflectVec3),0));
+                       reflectRay.setStart(hit.getIntersection() + 0.01f*ray.getDirection());
+
+                       raycast(reflectRay, modelView, reflectColor, true, count);
+
+					   color.r = reflectColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r;
+                       color.g = reflectColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g;
+                       color.b = reflectColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b;
+					   /*
+						if((int)color.r > 255)
+								color.r = 255;
+						if((int)color.g > 255)
+								color.g = 255;
+						if((int)color.b > 255) 
+								color.b = 255;
+						*/
+			   }		   
+					
+
+               // END REFACTOR
+       
+       }
+       else {
+               color = color.Black;
+       }
+
+       //color = color_a;
+       return isHit;
+}
+
+//bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat, sf::Color& color){
+/*
+bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color, bool shadow, int count){
+
+	bool isHit = false;
+	cout << "count" << count << endl;
 	if(count>5) {
 		return false;
 	}
-	sf::Color color_a;
-	sf::Color color_r;
-	//sf::Color color_t; // unused
-
-	bool isHit = false;
 	Hit hit;
+	sf::Color reflectColor;
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
 		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow, modelView);
+		//color = shade(hr.getIntersection(), lights, hr.getNormal(), hr.getMaterial(), shadow, modelView);
+		sf::Color absorb(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
+
+		
+		if(hit.getMat().getReflection() > 0 && count < 5){
+			count++;
+
+
+			Ray reflectRay;
+            glm::vec4 reflectVec4 = glm::reflect(ray.getDirection(), hit.getNormal());
+            glm::vec3 reflectVec3 = glm::vec3(reflectVec4.x,reflectVec4.y,reflectVec4.z);
+            // ONLY NORMALIZE A VEC3
+            reflectRay.setDirection(glm::vec4(glm::normalize(reflectVec3),0));
+            reflectRay.setStart(hit.getIntersection() + 0.01f*ray.getDirection());
+
+			raycast(reflectRay, modelView, reflectColor, count,true);
+		}
+
+		color.r = reflectColor.r*hit.getMat().getReflection() + absorb.r;
+		color.g = reflectColor.g*hit.getMat().getReflection() + absorb.g;
+		color.b = reflectColor.b*hit.getMat().getReflection() + absorb.b;
+		
+	
 	}
 	else {
 		color = color.Black;
 	}
 
-		sf::Color color_t;
+	sf::Color color_t;
 
-	if(hit.getMat().getReflection()>0 && count < 5){
-		count++;
-		Ray normal;
-		normal.setDirection(glm::normalize(hit.getNormal()));
-		normal.setStart(ray.getStart() + glm::normalize(ray.getDirection()));
-		Ray reflectRay;
-		reflectRay.setDirection(glm::normalize(glm::reflect(glm::normalize(ray.getDirection()),normal.getDirection())));
-		reflectRay.setStart(hit.getIntersection()+.01f*normal.getDirection());
-		raycast(reflectRay,modelView,color_t,true,count);
-	}
-
-	//color = hit.getMat().getAbsorption()*color + hit.getMat().getReflection()*color_t;
-
-	color.r = color_t.r*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.r;
-	color.g = color_t.g*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.g;
-	color.b = color_t.b*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.b;
-
-	//color = color_a;
 	return isHit;
 }
-
+*/
 sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat, Texture* tex, float s, float t, bool shadow, stack<glm::mat4>& modelView) {
 
 
