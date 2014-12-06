@@ -117,7 +117,8 @@ void View::draw()
 	glm::mat4 camMove2 = glm::scale(glm::mat4(1.0f), glm::vec3(zoom+1, zoom+1, zoom+1)) * glm::rotate(glm::mat4(1.0f),glm::radians(turn*1.0f),glm::vec3(1,0,0)) * glm::translate(glm::mat4(1.0f), glm::vec3(0,0,0));
 
 	if(camNum == 0) {
-	modelview.top() = modelview.top() * glm::lookAt(glm::vec3(0.8,1.8,0.2),glm::vec3(0,0,0),glm::vec3(1,0,0)) * camMove1 * trackballTransform;
+	//modelview.top() = modelview.top() * glm::lookAt(glm::vec3(0.8,1.8,0.2),glm::vec3(0,0,0),glm::vec3(1,0,0)) * camMove1 * trackballTransform;
+	modelview.top() = modelview.top() * glm::lookAt(glm::vec3(25,25,0.2),glm::vec3(0,0,0),glm::vec3(1,0,0)) * camMove1 * trackballTransform;
 	}
 	else if(camNum == 1) {
 		modelview.pop();
@@ -163,7 +164,7 @@ void View::draw()
 	// raytrace, eventually let this be called when the user presses a key(?)
 	if(raytraceImg) {
 		cout << "raytrace" << endl;
-		sgraph.raytrace(800,800, modelview);
+		sgraph.raytrace(200,200, modelview);
 		cout<<"raytrace done"<<endl;
 		raytraceImg = false;
 	}

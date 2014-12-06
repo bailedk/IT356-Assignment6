@@ -36,7 +36,7 @@ double frame_rate;
 bool mousePressed;
 int mouseX,mouseY;
 
-string filename = "simple.xml";
+string filename = "reflect-test.xml";
 
 int main(int argc, char *argv[])
 {

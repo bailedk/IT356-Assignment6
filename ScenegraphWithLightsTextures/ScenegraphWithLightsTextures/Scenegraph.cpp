@@ -219,7 +219,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
 			// Change bool to turn on/off shadows
-			if(raycast(ray, modelView, color, false, 5)) {
+			if(raycast(ray, modelView, color, false, 0)) {
 				image.setPixel(j,i,color);
 				count++;
 				//cout << "white" << endl;
@@ -255,36 +255,29 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 
 	if(isHit) {
 		color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow, modelView);
-		hit;
-		//cout << "hit set color "  << endl;
-		// lots of other stuff for reflection, transparency, refract etc...
-		// todo later
-		//color = color.White;
-
-		// REFACTOR
-		sf::Color color_a(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
-
-		if(hit.getMat().getReflection()) {
-			//cout << "reflect" << endl;
-			count++;
-			Ray reflectRay;
-
-			// ONLY NORMALIZE A VEC3
-			reflectRay.setDirection(glm::normalize(glm::reflect(ray.getDirection(), hit.getNormal())));
-			reflectRay.setStart(hit.getIntersection() + 0.01f*ray.getDirection());
-
-			raycast(reflectRay, modelView, color_r, true, count);
-
-			color.r = color_r.r*hit.getMat().getReflection() + color_a.r;
-			color.g = color_r.g*hit.getMat().getReflection() + color_a.g;
-			color.b = color_r.b*hit.getMat().getReflection() + color_a.b;
-		}
-
-		// END REFACTOR
 	}
 	else {
 		color = color.Black;
 	}
+
+		sf::Color color_t;
+
+	if(hit.getMat().getReflection()>0 && count < 5){
+		count++;
+		Ray normal;
+		normal.setDirection(glm::normalize(hit.getNormal()));
+		normal.setStart(ray.getStart() + glm::normalize(ray.getDirection()));
+		Ray reflectRay;
+		reflectRay.setDirection(glm::normalize(glm::reflect(glm::normalize(ray.getDirection()),normal.getDirection())));
+		reflectRay.setStart(hit.getIntersection()+.01f*normal.getDirection());
+		raycast(reflectRay,modelView,color_t,true,count);
+	}
+
+	//color = hit.getMat().getAbsorption()*color + hit.getMat().getReflection()*color_t;
+
+	color.r = color_t.r*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.r;
+	color.g = color_t.g*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.g;
+	color.b = color_t.b*hit.getMat().getReflection() + hit.getMat().getAbsorption()*color.b;
 
 	//color = color_a;
 	return isHit;

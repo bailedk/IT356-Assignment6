@@ -272,8 +272,8 @@ public:
 					hit.setMat(material);
 					glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
 
-				if(glm::abs(norm.x-.5)<.005)
-                            hit.setNormal(glm::inverse(glm::transpose(modelView.top()))*glm::vec4(1,0,0,0));
+					if(glm::abs(norm.x-.5)<.005)
+				            hit.setNormal(glm::inverse(glm::transpose(modelView.top()))*glm::vec4(1,0,0,0));
                     else if(glm::abs(norm.x+.5)<.005)
                             hit.setNormal(glm::inverse(glm::transpose(modelView.top()))*glm::vec4(-1,0,0,0));
                     else if(glm::abs(norm.y-.5)<.005)
