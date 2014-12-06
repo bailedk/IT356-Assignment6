@@ -3,7 +3,8 @@
 	<instance name="box" path="models/box" />
 	<instance name="cylinder" path="models/cylinder" />
 	<instance name="cone" path="models/cone" />
-	<image name="checkerboard" path="earthmap.png" />
+	<image name="earthmap" path="earthmap.png" />
+	<image name="checkerboard" path="checkerboard.png" />
 	<image name="white" path="white.png" />
 					
 	<group>
@@ -55,10 +56,34 @@
 			<set>		
 				<translate>0 1.2 0</translate>
 			</set>
-			<object instanceof="sphere" texture="checkerboard">
+			<object instanceof="sphere" texture="earthmap">
 				<material>
 					<ambient>1 1 1</ambient>
 					<diffuse>0.3 0.3 0.3</diffuse>
+					<specular>0.2 0.2 0.2</specular>
+					<shininess>50</shininess>
+					<!--the following four will be relevant in ray tracer -->
+					<absorption>0.5 </absorption>
+					<reflection>0.5</reflection>
+					<transparency>0</transparency>
+					<refractive>1.2</refractive>
+				</material>
+				<!-- light added to object node -->
+
+			</object>		
+	
+							
+	</transform>
+	
+	<transform>
+			<set>		
+				<scale>0.7 0.7 0.7</scale>
+				<translate>2 0 0</translate>
+			</set>
+			<object instanceof="box" texture="checkerboard">
+				<material>
+					<ambient>0.3 0 1</ambient>
+					<diffuse>0.3 0 0.3</diffuse>
 					<specular>0.2 0.2 0.2</specular>
 					<shininess>50</shininess>
 					<!--the following four will be relevant in ray tracer -->
@@ -80,7 +105,7 @@
 			<scale>0.1 8 8</scale>
 			<translate>-1.2 0 0</translate>
 		</set>
-			<object instanceof="box" texture = "white">
+			<object instanceof="box">
 				<material>
 					<ambient>0.2 0.2 1</ambient>
 					<diffuse>0.3 0.3 0.3</diffuse>
