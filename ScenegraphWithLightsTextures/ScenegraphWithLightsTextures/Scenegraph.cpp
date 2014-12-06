@@ -245,15 +245,16 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
        Hit hit;
        isHit=root->intersect(ray,hit,modelView); 
 
-	   sf::Color reflectColor;
+	   sf::Color rColor;
 
        if(isHit) {
+
                color = shade(hit.intersect, lights, hit.normal, hit.getMat(), hit.getTexture(),hit.getTextureS(), hit.getTextureT(), shadow, modelView);
                hit;
        
-               // REFACTOR
-               sf::Color color_a(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
+			   // something is wrong here
 
+               sf::Color color_a(color.r*hit.getMat().getAbsorption(), color.g*hit.getMat().getAbsorption(), color.b*hit.getMat().getAbsorption(), color.a*hit.getMat().getAbsorption());
 			   
                if(hit.getMat().getReflection()>0&&count<5) {
                        //cout << "reflect" << endl;
@@ -265,12 +266,12 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
                        reflectRay.setDirection(glm::vec4(glm::normalize(reflectVec3),0));
                        reflectRay.setStart(hit.getIntersection() + 0.01f * ray.getDirection());
 
-                       raycast(reflectRay, modelView, reflectColor, true, count);
+                       raycast(reflectRay, modelView, rColor, true, count);
 
-					   // the +40 is a temporary hack since the scene is too dark for some reason
-					   color.r = reflectColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r + 40;
-                       color.g = reflectColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g + 40;
-                       color.b = reflectColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b + 40;
+					   // the +40 is a temporary hack since the scene is too dark for some reason we can't figure out
+					   color.r = rColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r + 40;
+                       color.g = rColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g + 40;
+                       color.b = rColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b + 40;
 					   
 						if((int)color.r > 255)
 								color.r = 255;
@@ -281,9 +282,6 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
 						
 			   }		  
 					
-
-               // END REFACTOR
-       
        }
        else {
                color = color.Black;
