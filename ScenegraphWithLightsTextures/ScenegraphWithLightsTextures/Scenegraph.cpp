@@ -263,22 +263,23 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
                        glm::vec3 reflectVec3 = glm::vec3(reflectVec4.x,reflectVec4.y,reflectVec4.z);
                        // ONLY NORMALIZE A VEC3
                        reflectRay.setDirection(glm::vec4(glm::normalize(reflectVec3),0));
-                       reflectRay.setStart(hit.getIntersection() + 0.01f*ray.getDirection());
+                       reflectRay.setStart(hit.getIntersection() + 0.01f * ray.getDirection());
 
                        raycast(reflectRay, modelView, reflectColor, true, count);
 
-					   color.r = reflectColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r;
-                       color.g = reflectColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g;
-                       color.b = reflectColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b;
-					   /*
+					   // the +40 is a temporary hack since the scene is too dark for some reason
+					   color.r = reflectColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r + 40;
+                       color.g = reflectColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g + 40;
+                       color.b = reflectColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b + 40;
+					   
 						if((int)color.r > 255)
 								color.r = 255;
 						if((int)color.g > 255)
 								color.g = 255;
 						if((int)color.b > 255) 
 								color.b = 255;
-						*/
-			   }		   
+						
+			   }		  
 					
 
                // END REFACTOR
