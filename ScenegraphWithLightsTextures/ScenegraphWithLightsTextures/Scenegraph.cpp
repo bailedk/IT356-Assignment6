@@ -259,19 +259,30 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color,
                if(hit.getMat().getReflection()>0&&count<5) {
                        //cout << "reflect" << endl;
                        count++;
+					   /*
                        Ray reflectRay;
                        glm::vec4 reflectVec4 = glm::reflect(ray.getDirection(), hit.getNormal());
                        glm::vec3 reflectVec3 = glm::vec3(reflectVec4.x,reflectVec4.y,reflectVec4.z);
                        // ONLY NORMALIZE A VEC3
                        reflectRay.setDirection(glm::vec4(glm::normalize(reflectVec3),0));
                        reflectRay.setStart(hit.getIntersection() + 0.01f * ray.getDirection());
+					   */
+
+					   glm::vec4 normalDir = glm::vec4(glm::normalize(ray.getDirection().xyz()),0);
+					   glm::vec4 normalNorm = glm::vec4(glm::normalize(hit.getNormal().xyz()),0);
+
+					   Ray reflectRay;
+
+					   reflectRay.setDirection(glm::reflect(normalDir,normalNorm));
+					   reflectRay.setStart(hit.getIntersection() + 0.001f * ray.getDirection());
+
+					   glm::vec4 reflectVec4 = glm::reflect(glm::normalize(ray.getDirection()), glm::normalize(hit.getNormal()));
 
                        raycast(reflectRay, modelView, rColor, true, count);
 
-					   // the +40 is a temporary hack since the scene is too dark for some reason we can't figure out
-					   color.r = rColor.r*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.r + 40;
-                       color.g = rColor.g*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.g + 40;
-                       color.b = rColor.b*hit.getMat().getReflection() + hit.getMat().getReflection() * color_a.b + 40;
+					   color.r = rColor.r*hit.getMat().getReflection() + color_a.r;
+                       color.g = rColor.g*hit.getMat().getReflection() + color_a.g;
+                       color.b = rColor.b*hit.getMat().getReflection() + color_a.b;
 					   
 						if((int)color.r > 255)
 								color.r = 255;
